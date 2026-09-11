@@ -13,7 +13,6 @@ Warren Notrica
 Hackathon Attendance Planning Agent
 
 ### System Goal
-
 For Cal Poly Vibe Coding Club event organizers, improve their ability to plan food, drinks, and swag for a campus-wide AI Hackathon, measured by producing one event-specific, evidence-backed attendance forecast and supply recommendation per planning run, moving from reliance on a single approximate 40% historical attendance-to-registration rate and organizer judgment to an organizer-reviewable forecast range based on registrations and voluntary confirmations, without collecting unnecessary personal information, sending messages or purchasing supplies without organizer approval, or presenting the forecast as certain.
 
 ### Who Is Better Off When This Works?
