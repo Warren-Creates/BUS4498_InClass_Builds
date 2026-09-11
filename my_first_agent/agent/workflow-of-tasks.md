@@ -2,7 +2,7 @@
 
 ### 1.1 Workflow Goal
 
-This workflow supports the system goal defined in `my_first_agent/README.md`: create an organizer-reviewable attendance forecast and supply recommendation for a Cal Poly Vibe Coding Club AI Hackathon while respecting participant privacy and preserving organizer authority.
+This workflow supports the system goal defined in `my_first_agent/README.md`.
 
 ### 1.2 Workflow Trigger
 
