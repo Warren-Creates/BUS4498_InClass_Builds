@@ -2,41 +2,39 @@
 
 ### 1.1 Workflow Goal
 
-This workflow supports the system goal defined in `my_first_agent/README.md`: take a customer food order from first request through confirmed payment and accurate handoff, including clarification when the request is unclear and preserving evidence for later improvement.
+This workflow supports the system goal defined in `my_first_agent/README.md`: create an organizer-reviewable attendance forecast and supply recommendation for a Cal Poly Vibe Coding Club AI Hackathon while respecting participant privacy and preserving organizer authority.
 
 ### 1.2 Workflow Trigger
 
-The workflow starts when a customer begins an order (spoken or entered) for menu items.
+The workflow starts when a Cal Poly Vibe Coding Club organizer requests an attendance-planning run after registration data is available, or when an organizer-approved planning schedule starts the same bounded run.
 
 ### 1.3 Completion Condition at Runtime
 
-The workflow is complete when a paid, completeness- and accuracy-checked order has been handed to the customer, and the run’s order details, any exception/routing choice, and outcome have been stored.
+The workflow is complete when the organizer can review an event-specific attendance forecast range, a food, drink, and swag recommendation, the supporting data and uncertainties, and a stored run summary. Completion does not mean that the system contacted participants or purchased supplies.
 
 ### 1.4 General Workflow
 
-On the normal path, the system loads menu, prices, availability, and order policy; interprets the customer’s order; assesses whether the request is feasible and unambiguous; routes to automated handling; requests and processes payment; prepares the order; verifies payment, completeness, and accuracy; hands the order to the customer; stores the run record; and, when human review finds recurring failures, updates guidance for future runs.
+On the normal path, the system loads only organizer-authorized registration records, voluntary confirmation data, prior event attendance information, and the available budget and supply constraints. It validates the information for missing or conflicting values, summarizes registrations and confirmations, creates an attendance forecast range, and turns that range into a recommendation for food, drinks, and swag. It then presents the forecast, assumptions, uncertainties, and recommendation to an organizer for review before storing the run summary.
 
-The main exception path is clarification: if the request is infeasible or ambiguous, the system selects employee clarification instead of automated handling, resolves the order with a human, then continues to payment and fulfillment. Human-review points are (1) employee clarification before payment and (2) post-run review that may trigger Learn updates. The workflow does not end at payment alone — preparation, verify, and handoff are required for completion.
+If needed information is missing, stale, or inconsistent, the system asks an organizer to clarify or update the information and waits rather than guessing. If the organizer rejects or revises the assumptions, the system updates the authorized inputs and recalculates the forecast. Human review is required before any recommendation is used; the system may not send participant messages, make purchases, or treat its forecast as guaranteed.
 
 ### 1.5 Workflow Diagram
 
 ```mermaid
 flowchart TD
-    T1["T1: Load menu and policy"] --> T2["T2: Interpret customer order"]
-    T2 --> T3["T3: Assess feasibility"]
-    T3 --> D1{"Feasible and unambiguous?"}
-    D1 -->|Yes| T4["T4: Select automated handling"]
-    D1 -->|No| H1["H1: Employee clarification"]
-    H1 --> T4
-    T4 --> T5["T5: Request and process payment"]
-    T5 --> T6["T6: Prepare the order"]
-    T6 --> T7["T7: Confirm payment completeness accuracy"]
-    T7 --> D2{"Verify passed?"}
-    D2 -->|No| H2["H2: Fix order before handoff"]
-    H2 --> T7
-    D2 -->|Yes| T8["T8: Hand order to customer"]
-    T8 --> T9["T9: Store order and outcome"]
-    T9 --> D3{"Recurring failure after review?"}
-    D3 -->|Yes| T10["T10: Revise guidance"]
-    D3 -->|No| C1([C1: Workflow complete])
-    T10 --> C1
+    S([Run starts]) --> T1["T1: Load authorized event data"]
+    T1 --> T2["T2: Validate event data"]
+    T2 --> D1{"Data complete and consistent?"}
+    D1 -->|Yes| T3["T3: Summarize registrations and confirmations"]
+    D1 -->|No| H1["H1: Request organizer clarification"]
+    H1 --> D2{"Organizer provides approved update?"}
+    D2 -->|Yes| T1
+    D2 -->|No| C0([Stop: Awaiting organizer])
+    T3 --> T4["T4: Calculate attendance forecast"]
+    T4 --> T5["T5: Recommend supplies"]
+    T5 --> H2["H2: Present forecast for organizer review"]
+    H2 --> D3{"Organizer approves assumptions and recommendation?"}
+    D3 -->|Yes| T6["T6: Store run summary"]
+    D3 -->|No| H3["H3: Revise authorized inputs"]
+    H3 --> T4
+    T6 --> C1([C1: Run complete])
