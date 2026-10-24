@@ -142,6 +142,104 @@
     .then(function (d) { if (d && d.ai) $("aiNote").textContent = "Event cards are drafted by an AI agent, " + d.ai + ", and checked against the posting rules."; })
     .catch(function () { /* the website still works without this note */ });
 
+  /* ---------- Stage 8: moderator sign-in ----------
+     Only moderators have accounts (new sign-ups are turned off in Supabase Auth).
+     Signed in, the security rules let them see every post and change only its review status. */
+  var moderator = null;
+
+  function modStatus(text) { $("modStatus").textContent = text || ""; }
+
+  function showModerator(user) {
+    moderator = user;
+    $("signInForm").hidden = Boolean(user);
+    $("modArea").hidden = !user;
+    if (user) {
+      $("modWho").textContent = "Signed in as " + (user.email || "a moderator") + ".";
+      loadQueue();
+    } else {
+      $("queue").textContent = "";
+    }
+  }
+
+  function loadQueue() {
+    modStatus("Loading waiting posts…");
+    db.from("events").select("*").eq("status", "waiting")
+      .order("created_at", { ascending: true })
+      .then(function (res) {
+        var list = $("queue");
+        list.textContent = "";
+        if (res.error) { modStatus("Couldn't load waiting posts: " + res.error.message); return; }
+        res.data.forEach(function (ev) { list.appendChild(card(ev, reviewBox(ev))); });
+        if (!res.data.length) list.appendChild(el("li", "empty", "Nothing is waiting. All caught up!"));
+        modStatus(res.data.length ? res.data.length + (res.data.length === 1 ? " post waiting" : " posts waiting") : "");
+      });
+  }
+
+  // The reason it waits, the original post, and the Approve and Reject buttons.
+  function reviewBox(ev) {
+    var box = el("div", "review");
+    box.appendChild(el("p", "why", ev.status_reason || "Waiting for a moderator."));
+    if (ev.note_for_moderator) box.appendChild(el("p", "why", ev.note_for_moderator));
+    box.appendChild(el("p", "original", ev.announcement));
+    var actions = el("p", "actions");
+    var approve = el("button", null, "Approve");
+    var reject = el("button", "ghost", "Reject");
+    approve.type = reject.type = "button";
+    approve.addEventListener("click", function () { review(ev, "published", [approve, reject]); });
+    reject.addEventListener("click", function () { review(ev, "rejected", [approve, reject]); });
+    actions.appendChild(approve);
+    actions.appendChild(reject);
+    box.appendChild(actions);
+    return box;
+  }
+
+  function review(ev, status, buttons) {
+    buttons.forEach(function (b) { b.disabled = true; });
+    db.from("events")
+      .update({
+        status: status,
+        status_reason: status === "published" ? "Approved by a moderator." : "Rejected by a moderator.",
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: moderator && moderator.email ? moderator.email : "moderator",
+      })
+      .eq("id", ev.id)
+      .then(function (res) {
+        if (res.error) {
+          buttons.forEach(function (b) { b.disabled = false; });
+          modStatus(res.error.code === "23505"
+            ? "Another live post already has this date, time, and place. Reject one of them."
+            : "Couldn't save that: " + res.error.message);
+          return;
+        }
+        loadQueue();
+        loadBoard();
+      });
+  }
+
+  $("signInForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var btn = $("signInBtn");
+    btn.disabled = true;
+    modStatus("Signing in…");
+    db.auth.signInWithPassword({ email: $("modEmail").value.trim(), password: $("modPassword").value })
+      .then(function (res) {
+        $("modPassword").value = "";
+        if (res.error) { modStatus("Sign-in failed: check the email and password."); return; }
+        modStatus("");
+        showModerator(res.data.user);
+      })
+      .then(function () { btn.disabled = false; });
+  });
+
+  $("signOutBtn").addEventListener("click", function () {
+    db.auth.signOut().then(function () { showModerator(null); modStatus("Signed out."); });
+  });
+
+  // Stay signed in after a page reload.
+  db.auth.getSession().then(function (res) {
+    var session = res.data && res.data.session;
+    if (session) { $("modPanel").open = true; showModerator(session.user); }
+  });
 
   loadBoard();
 })();

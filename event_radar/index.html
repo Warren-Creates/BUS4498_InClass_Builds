@@ -41,6 +41,27 @@
     <p id="boardStatus" class="muted" role="status"></p>
     <ul id="board" class="board"></ul>
 
+    <details class="card mod" id="modPanel">
+      <summary>Moderator sign-in</summary>
+      <div>
+        <form id="signInForm">
+          <label for="modEmail">Email</label>
+          <input id="modEmail" type="email" autocomplete="username" required>
+          <label for="modPassword">Password</label>
+          <input id="modPassword" type="password" autocomplete="current-password" required>
+          <button type="submit" id="signInBtn">Sign in</button>
+        </form>
+        <div id="modArea" hidden>
+          <div class="board-head">
+            <p class="muted" id="modWho"></p>
+            <button type="button" class="ghost" id="signOutBtn">Sign out</button>
+          </div>
+          <h3>Waiting for review</h3>
+          <ul id="queue" class="board"></ul>
+        </div>
+        <p id="modStatus" class="muted" role="status"></p>
+      </div>
+    </details>
   </section>
 </main>
 
