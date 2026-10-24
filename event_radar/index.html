@@ -41,25 +41,21 @@
     <p id="boardStatus" class="muted" role="status"></p>
     <ul id="board" class="board"></ul>
 
-    <details class="card mod" id="modPanel">
+    <details class="card mod" id="modBox">
       <summary>Moderator sign-in</summary>
-      <div>
-        <form id="signInForm">
-          <label for="modEmail">Email</label>
-          <input id="modEmail" type="email" autocomplete="username" required>
-          <label for="modPassword">Password</label>
-          <input id="modPassword" type="password" autocomplete="current-password" required>
-          <button type="submit" id="signInBtn">Sign in</button>
-        </form>
-        <div id="modArea" hidden>
-          <div class="board-head">
-            <p class="muted" id="modWho"></p>
-            <button type="button" class="ghost" id="signOutBtn">Sign out</button>
-          </div>
-          <h3>Waiting for review</h3>
-          <ul id="queue" class="board"></ul>
-        </div>
-        <p id="modStatus" class="muted" role="status"></p>
+      <form id="signInForm">
+        <label for="modEmail">Email</label>
+        <input id="modEmail" type="email" autocomplete="username" required>
+        <label for="modPassword">Password</label>
+        <input id="modPassword" type="password" autocomplete="current-password" required>
+        <button type="submit" id="signInBtn">Sign in</button>
+        <p id="signInMsg" class="muted" role="status"></p>
+      </form>
+      <div id="modArea" hidden>
+        <p>Signed in as <b id="modWho"></b>. <button type="button" class="ghost" id="signOutBtn">Sign out</button></p>
+        <h3>Waiting for review</h3>
+        <p id="waitingStatus" class="muted" role="status"></p>
+        <ul id="waitingList" class="board"></ul>
       </div>
     </details>
   </section>
