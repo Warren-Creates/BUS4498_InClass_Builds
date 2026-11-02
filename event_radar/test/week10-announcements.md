@@ -20,13 +20,13 @@ Send them in order, one step at a time. "Expected" says what a good agent should
 
 ### C. The new club's next post
 
-> Kite Flyers general meeting Tuesday, November 3 6 pm, UU Room 204. We'll plan the spring kite festival.
+> Kite Flyers general meeting Tuesday, November 10 6 pm, UU Room 204. We'll plan the spring kite festival.
 
 **Expected:** Published, with the club shown as **Cal Poly Kite Flyers**. You changed what the agent knows without touching the code.
 
 ### D. A known club, no place
 
-> Board Game Guild officers meeting Tuesday, November 3 at 5 pm, usual spot. Agenda: spring budget.
+> Board Game Guild officers meeting Tuesday, November 10 at 5 pm, usual spot. Agenda: spring budget.
 
 **Expected:** Waiting for a moderator, because the place is missing (rule R2). The reason adds a hint from the club list: Board Game Guild usually meets at University Union (UU), Room 220. The agent didn't fill the place in: knowledge about a club in general isn't a fact about this event.
 
@@ -34,19 +34,19 @@ Send them in order, one step at a time. "Expected" says what a good agent should
 
 ### E. The original post
 
-> Mustang Pitch Society: pitch practice Tuesday, November 3 at 6 pm at the UU Plaza. First-timers welcome, bring a one-minute idea.
+> Mustang Pitch Society: pitch practice Tuesday, November 10 at 6 pm at the UU Plaza. First-timers welcome, bring a one-minute idea.
 
-**Expected:** Published for Tuesday, November 3 at 6:00 PM at the UU Plaza.
+**Expected:** Published for Tuesday, November 10 at 6:00 PM at the UU Plaza.
 
 ### F. An update
 
-> Update from Mustang Pitch Society: pitch practice on Tuesday, November 3 is moved to 7 pm, same place.
+> Update from Mustang Pitch Society: pitch practice on Tuesday, November 10 is moved to 7 pm, same place.
 
 **Expected:** Published, **replacing E**. The agent checked the club's upcoming posts, saw that this updates "pitch practice," and copied the place from the earlier post. The earlier card leaves the website. **Before:** two cards for one event, because 6 pm and 7 pm have different duplicate keys.
 
 ### G. A reminder that changes nothing
 
-> Don't forget: Mustang Pitch Society pitch practice Tuesday, November 3 7 pm, UU Plaza 🙌
+> Don't forget: Mustang Pitch Society pitch practice Tuesday, November 10 7 pm, UU Plaza 🙌
 
 **Expected:** Already posted. A reminder isn't an update, and the database's duplicate check (same date, start time, and place as F) refuses a second copy.
 
@@ -54,7 +54,7 @@ Send them in order, one step at a time. "Expected" says what a good agent should
 
 ### H. Something the rules don't cover
 
-> Accounting Society: drop-in study hours Tuesday, November 3 4 to 6 pm in the Business building, Room 212. Bring your homework.
+> Accounting Society: drop-in study hours Tuesday, November 10 4 to 6 pm in the Business building, Room 212. Bring your homework.
 
 **Expected:** Published. The posting rules don't say anything about study hours, so to the agent it looks like an event. Now teach it: sign in as a moderator and save this lesson: *Drop-in study hours, tutoring, and office hours aren't events for this website. Hold them for a moderator.*
 
